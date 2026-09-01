@@ -1,0 +1,168 @@
+.login-page{
+    min-height:100vh;
+     background-image:
+    
+    url("../assets/herosection.png");
+     background-size:cover;
+     background-position: center;
+     display:flex;
+     align-items:center;
+     justify-content:center;
+
+}
+.login-overlay{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    padding:120px 20px 50px;
+}
+.login-card{
+    width:100%;
+    max-width: 430px;
+    padding:49px;
+    background: rgba(255, 255, 255, 0.95);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.25);
+}
+.login-card h1{
+    text-align:center;
+    color:#123;
+    font-size:32px;
+    margin-bottom:10px;
+
+}
+.login-subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:30px;
+
+}
+/* Form */
+.form-group{
+    margin-bottom:20px;
+
+}
+.form-group label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+    color:#333;
+
+}
+
+
+
+
+
+
+.form-group input{
+    width:100%;
+    padding:13px 15px;
+     border: 1px solid #ddd;
+
+  border-radius: 10px;
+
+  font-size: 15px;
+
+  box-sizing: border-box;
+
+  outline: none;
+
+}
+.form-group input:focus {
+  border-color: #0b5ed7;
+
+  box-shadow:
+    0 0 0 3px rgba(11, 94, 215, 0.1);
+}
+/* Options */
+
+.login-options {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 25px;
+
+  font-size: 14px;
+}
+
+.login-options label {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px
+}
+.login-options a {
+  color: #0b5ed7;
+
+  text-decoration: none;
+}
+/* Button */
+
+.login-submit {
+  width: 100%;
+
+  padding: 14px;
+
+  border: none;
+
+  border-radius: 25px;
+
+  background: #0b5ed7;
+ color: white;
+
+  font-size: 16px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+.login-submit:hover {
+  background: #084298;
+
+  transform: translateY(-2px);
+}
+/* Register */
+
+.register-text {
+  text-align: center;
+
+  margin-top: 25px;
+
+  color: #666;
+}
+
+.register-text a {
+  color: #0b5ed7;
+
+  font-weight: 600;
+
+  text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

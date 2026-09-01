@@ -1,0 +1,378 @@
+.policy-page {
+  min-height: 100vh;
+
+  padding: 120px 7% 60px;
+
+  background-color:whitesmoke;
+
+  box-sizing: border-box;
+}
+
+
+/* Header */
+
+.policy-top {
+  max-width: 1200px;
+
+  margin: 0 auto 30px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.policy-top h1 {
+  color: balck;
+
+  font-size: 36px;
+
+  margin-bottom: 8px;
+}
+
+.policy-top p {
+  color: black;
+  font-size: 20px;
+
+}
+
+.back-btn {
+  text-decoration: none;
+
+  color: black;
+
+  font-weight: 600;
+}
+
+
+/* Main Policy */
+
+.main-policy-card {
+  max-width: 1200px;
+
+  margin: auto;
+
+  padding: 35px;
+
+  background: gray;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+.policy-main-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 35px;
+}
+
+
+.policy-title {
+  display: flex;
+
+  align-items: center;
+
+  gap: 20px;
+}
+
+
+.policy-shield {
+  width: 65px;
+  height: 65px;
+
+  border-radius: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: #e8f3ff;
+
+  color: #0b5ed7;
+
+  font-size: 30px;
+}
+
+
+.active-status {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  color: #087443;
+
+  background: #d1fae5;
+
+  padding: 5px 12px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+
+.policy-title h2 {
+  margin: 10px 0 5px;
+
+  color: #123;
+}
+
+
+.policy-title p {
+  color: #777;
+}
+
+
+/* Download */
+
+.download-btn {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  border: none;
+
+  background: #0b5ed7;
+
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 25px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* Information */
+
+.policy-info-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 20px;
+
+  padding-top: 25px;
+
+  border-top: 1px solid #eee;
+}
+
+
+.policy-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+
+.policy-info > svg {
+  color: #0b5ed7;
+
+  font-size: 22px;
+}
+
+
+.policy-info span {
+  display: block;
+
+  color: #777;
+
+  font-size: 13px;
+
+  margin-bottom: 5px;
+}
+
+
+.policy-info strong {
+  color: #123;
+
+  font-size: 17px;
+}
+
+
+/* Sections */
+
+.members-section,
+.benefits-section {
+  max-width: 1200px;
+
+  margin: 40px auto 0;
+}
+
+
+.members-section h2,
+.benefits-section h2 {
+  color: #123;
+
+  margin-bottom: 8px;
+}
+
+
+.section-description {
+  color: #777;
+
+  margin-bottom: 20px;
+}
+
+
+/* Members */
+
+.members-grid {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 20px;
+}
+
+
+.member-card {
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+
+.member-avatar {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background: #0b5ed7;
+
+  color: white;
+
+  font-weight: bold;
+}
+
+
+.member-card h3 {
+  color: #123;
+
+  font-size: 16px;
+
+  margin-bottom: 5px;
+}
+
+
+.member-card p {
+  color: #777;
+
+  font-size: 13px;
+}
+
+
+/* Benefits */
+
+.benefits-grid {
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 20px;
+}
+
+
+.benefit-card {
+  background: white;
+
+  padding: 20px;
+
+  border-radius: 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.05);
+}
+
+
+.benefit-card svg {
+  color: #0b5ed7;
+
+  font-size: 20px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+  .policy-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .members-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .benefits-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+
+@media (max-width: 600px) {
+
+  .policy-top,
+  .policy-main-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 20px;
+  }
+
+  .policy-info-grid,
+  .members-grid,
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .main-policy-card {
+    padding: 25px;
+  }
+}

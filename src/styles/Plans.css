@@ -1,0 +1,184 @@
+.plans-page{
+    min-height:100vh;
+    background-color: #6985ad;
+}
+
+/* Header */
+.plans-header{
+    padding:150px 8% 70px;
+    text-align:center;
+     background: linear-gradient(
+    135deg,
+    #0b5ed7,
+    #0dcaf0
+  );
+  color: white;
+}
+.plans-header h1{
+  font-size:44px;
+  margin-bottom:15px;
+}
+.plans-header p{
+  font-size: 18px;
+
+}
+/* Plans */
+.plans-section{
+  padding:70px 8%;
+
+}
+.plans-container{
+  max-width:1200px;
+  margin:auto;
+  display:auto;
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:30px;
+
+}
+
+/* Card */
+.plan-card{
+  position:relative;
+  background: white;
+  padding:40px 30px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 8px 30px rgba(0,0,0,0.08);
+  transition:0.3s;
+}
+.plan-card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 15px 40px rgba(0,0,0,0.15);
+}
+/* Popular */
+.plan-card.popular{
+  border:3px solid #0b5ed7;
+
+}
+.popular-badge{
+  position:absolute;
+  top:-15px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#0b5ed7;
+  color:white;
+  padding:7px 20px;
+  border-radius:20px;
+  font-size: 13px;
+  font-weight:600;
+}
+
+/* Icon */
+.plan-icon{
+  width:70px;
+  height:70px;
+  margin:10px auto 20px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: #e8f3ff;
+  color:#0b5ed7;
+  font-size:30px;
+
+
+}
+/* Text */
+.plan-card h2{
+  color:#123;
+  margin-bottom:12px;
+
+}
+.plan-description{
+  color:#666;
+  line-height:1.6;
+  min-height:50px;
+
+}
+/* Price */
+.plan-price{
+  margin:25px 0;
+  color:#0b5ed7;
+
+}
+.plan-price span{
+  font-size:32px;
+  font-weight:700;
+
+}
+.plan-price small{
+  color:#666;
+  font-size:14px;
+
+
+}
+/* Coverage */
+.coverage{
+  padding:12px;
+  background: #f0f7ff;
+  border-radius:10px;
+  margin-bottom: 25px;
+  color:#333;
+}
+/* Features */
+.plan-card ul{
+  list-style:none;
+  padding:0;
+  text-align:left;
+  margin-bottom:30px;
+
+}
+.plan-card li{
+  padding:10px 0;
+  color:#555;
+  border-bottom:1px solid #eee;
+
+}
+/* Button */
+
+.plan-btn {
+  display: block;
+
+  text-decoration: none;
+
+  background: #0b5ed7;
+
+  color: white;
+
+  padding: 13px;
+
+  border-radius: 25px;
+
+  font-weight: 600;
+
+  transition: 0.3s;
+}
+.plan-btn:hover {
+  background: #084298;
+
+  transform: translateY(-2px);
+}
+
+
+/* Responsive */
+
+@media (max-width: 900px) {
+
+  .plans-container {
+    grid-template-columns: 1fr;
+    max-width: 500px;
+  }
+
+  .plans-header h1 {
+    font-size: 36px;
+  }
+}
+
+
+
+
+
+
+
+
