@@ -3,15 +3,32 @@ import "../styles/About.css";
 
 function About() {
   const [customerCount, setCustomerCount] = useState(0);
-      useEffect(() => {
+  //     useEffect(() => {
 
-    const users =
-      JSON.parse(localStorage.getItem("users")) || [];
+  //   const users =
+  //     JSON.parse(localStorage.getItem("users")) || [];
 
-    setCustomerCount(users.length);
+  //   setCustomerCount(users.length);
 
-  }, []);
+  // }, []);
+useEffect(() => {
 
+  fetch("http://localhost:8080/api/users/count")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch customer count");
+      }
+
+      return response.json();
+    })
+    .then((count) => {
+      setCustomerCount(count);
+    })
+    .catch((error) => {
+      console.error("Customer count error:", error);
+    });
+
+}, []);
 
 
   return (

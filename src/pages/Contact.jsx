@@ -20,48 +20,141 @@ function Contact() {
 
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+    
+
+const handleSubmit = async (e) => {
+
+  e.preventDefault();
+
+  setError("");
+  setSuccess("");
+
+  // Check all fields
+  if (
+    name === "" ||
+    email === "" ||
+    phone === "" ||
+    subject === "" ||
+    message === ""
+  ) {
+
+    setError("Please fill all the fields.");
+
+    return;
+  }
 
 
-  const handleSubmit = (e) => {
+  try {
 
-    e.preventDefault();
+    const response = await fetch(
+      "http://localhost:8080/api/contacts",
+      {
+        method: "POST",
 
-    setError("");
-    setSuccess("");
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          fullName: name,
+          email: email,
+          phone: phone,
+          subject: subject,
+          message: message
+        })
+      }
+    );
 
 
-    // Check all fields
+    if (!response.ok) {
 
-    if (
-      name === "" ||
-      email === "" ||
-      phone === "" ||
-      subject === "" ||
-      message === ""
-    ) {
+      throw new Error("Failed to send message");
 
-      setError("Please fill all the fields.");
-
-      return;
     }
 
 
-    // Success message
+    const data = await response.json();
 
+    console.log("Contact message saved:", data);
+
+
+    // Success message
     setSuccess(
       "Thank you! Your message has been sent successfully."
     );
 
 
     // Clear form
-
     setName("");
     setEmail("");
     setPhone("");
     setSubject("");
     setMessage("");
 
-  };
+
+  } catch (error) {
+
+    console.error("Contact error:", error);
+
+    setError(
+      "Unable to send your message. Please make sure the server is running."
+    );
+
+  }
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+  // const handleSubmit = (e) => {
+
+  //   e.preventDefault();
+
+  //   setError("");
+  //   setSuccess("");
+
+
+  //   // Check all fields
+
+  //   if (
+  //     name === "" ||
+  //     email === "" ||
+  //     phone === "" ||
+  //     subject === "" ||
+  //     message === ""
+  //   ) {
+
+  //     setError("Please fill all the fields.");
+
+  //     return;
+  //   }
+
+
+  //   // Success message
+
+  //   setSuccess(
+  //     "Thank you! Your message has been sent successfully."
+  //   );
+
+
+  //   // Clear form
+
+  //   setName("");
+  //   setEmail("");
+  //   setPhone("");
+  //   setSubject("");
+  //   setMessage("");
+
+  // };
 
 
   return (

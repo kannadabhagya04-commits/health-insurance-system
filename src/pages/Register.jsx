@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -16,17 +17,14 @@ function Register() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
 
     e.preventDefault();
 
     setError("");
     setSuccess("");
 
-
     // Check empty fields
-
     if (
       fullName === "" ||
       email === "" ||
@@ -34,94 +32,70 @@ function Register() {
       password === "" ||
       confirmPassword === ""
     ) {
-
       setError("Please fill all the fields.");
-
       return;
     }
-
 
     // Check password
-
     if (password !== confirmPassword) {
-
       setError("Passwords do not match.");
-
       return;
     }
-
 
     // Check password length
-
     if (password.length < 5) {
-
       setError("Password must contain at least 5 characters.");
-
       return;
     }
 
+    // Send registration data to Spring Boot
+    try {
 
-    // Get existing users
+      const response = await fetch(
+        "http://localhost:8080/api/users/register",
+        {
+          method: "POST",
 
-    const existingUsers =
-      JSON.parse(localStorage.getItem("users")) || [];
+          headers: {
+            "Content-Type": "application/json"
+          },
 
+          body: JSON.stringify({
+            fullName: fullName,
+            email: email,
+            phone: phone,
+            password: password
+          })
+        }
+      );
 
-    // Check whether email already exists
+      // Check response
+      if (!response.ok) {
+        throw new Error("Registration failed");
+      }
 
-    const userExists = existingUsers.some(
-      (user) => user.email === email
-    );
+      const data = await response.json();
 
+      console.log("Registered user:", data);
 
-    if (userExists) {
+      setSuccess(
+        "Account created successfully! Redirecting to login..."
+      );
 
-      setError("An account with this email already exists.");
+      // Redirect to login
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
 
-      return;
+    } catch (error) {
+
+      console.error("Registration error:", error);
+
+      setError(
+        "Unable to register. Please make sure the server is running."
+      );
     }
-
-
-    // Create new user
-
-    const newUser = {
-
-      fullName: fullName,
-
-      email: email,
-
-      phone: phone,
-
-      password: password
-
-    };
-
-
-    // Save user
-
-    existingUsers.push(newUser);
-
-    localStorage.setItem(
-      "users",
-      JSON.stringify(existingUsers)
-    );
-
-
-    setSuccess(
-      "Account created successfully! Redirecting to login..."
-    );
-
-
-    // Go to login
-
-    setTimeout(() => {
-
-      navigate("/login");
-
-    }, 1500);
-
   };
-
 
   return (
 
@@ -133,14 +107,11 @@ function Register() {
           Create Your Account
         </h1>
 
-
         <p className="register-subtitle">
           Join HealthCare+ and protect your future
         </p>
 
-
         <form onSubmit={handleRegister}>
-
 
           {/* Full Name */}
 
@@ -271,7 +242,6 @@ function Register() {
             Create Account
           </button>
 
-
         </form>
 
 
@@ -285,11 +255,9 @@ function Register() {
 
         </p>
 
-
       </div>
 
     </div>
-
   );
 }
 

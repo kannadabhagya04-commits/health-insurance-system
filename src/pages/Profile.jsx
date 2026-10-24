@@ -1,4 +1,6 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
+
 import {
   FaUser,
   FaEnvelope,
@@ -12,329 +14,284 @@ import {
 import "../styles/Profile.css";
 
 function Profile() {
-
   const [editing, setEditing] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("loggedInUser"))
-   
-  );
+  // Load the logged-in user's profile
+  useEffect(() => {
+    const token = localStorage.getItem("token");
 
+    if (!token) {
+      setError("Please log in to view your profile.");
+      setLoading(false);
+      return;
+    }
+
+    const fetchProfile = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8080/api/users/profile",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        if (response.status === 401 || response.status === 403) {
+          throw new Error("Your session is invalid. Please log in again.");
+        }
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile.");
+        }
+
+        const data = await response.json();
+        setUser(data);
+
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({ email: data.email })
+        );
+      } catch (err) {
+        console.error("Profile error:", err);
+        setError(err.message || "Unable to load your profile.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  // Handle input changes
   const handleChange = (e) => {
+    const { name, value } = e.target;
 
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value
-    });
-
+    setUser((previousUser) => ({
+      ...previousUser,
+      [name]: value
+    }));
   };
 
+  // Save all editable profile fields
+  const handleSave = async () => {
+    const token = localStorage.getItem("token");
 
-  const handleSave = () => {
-      localStorage.setItem("loggedInUser",JSON.stringify(user));
-      
+    if (!token) {
+      setError("Please log in again to update your profile.");
+      return;
+    }
 
+    setSaving(true);
+    setError("");
 
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/users/profile",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            fullName: user.fullName,
+            phone: user.phone,
+            dateOfBirth: user.dateOfBirth,
+            emergencyContact: user.emergencyContact,
+            address: user.address
+          })
+        }
+      );
 
+      if (response.status === 401 || response.status === 403) {
+        throw new Error("Your session is invalid. Please log in again.");
+      }
 
-    setEditing(false);
+      if (!response.ok) {
+        throw new Error("Failed to update profile.");
+      }
 
-    alert("Profile updated successfully!");
+      const updatedUser = await response.json();
+      setUser(updatedUser);
 
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify({ email: updatedUser.email })
+      );
+
+      setEditing(false);
+      alert("Profile updated successfully!");
+    } catch (err) {
+      console.error("Profile update error:", err);
+      setError(err.message || "Unable to update your profile.");
+    } finally {
+      setSaving(false);
+    }
   };
 
+  if (loading) {
+    return (
+      <div className="profile-page">
+        <div className="profile-card">
+          <h2>Loading profile...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (error && !user) {
+    return (
+      <div className="profile-page">
+        <div className="profile-card">
+          <h2>My Profile</h2>
+          <p role="alert">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) return null;
 
   return (
-
     <div className="profile-page">
-
-      {/* Header */}
-
       <div className="profile-header">
-
         <div>
-
           <h1>My Profile</h1>
-
-          <p>
-            Manage your personal information and account details.
-          </p>
-
+          <p>Manage your personal information and account details.</p>
         </div>
 
         {!editing ? (
-
           <button
+            type="button"
             className="edit-profile-btn"
-            onClick={() => setEditing(true)}
+            onClick={() => {
+              setError("");
+              setEditing(true);
+            }}
           >
-            <FaEdit />
-            Edit Profile
+            <FaEdit /> Edit Profile
           </button>
-
         ) : (
-
           <button
+            type="button"
             className="save-profile-btn"
             onClick={handleSave}
+            disabled={saving}
           >
-            <FaSave />
-            Save Changes
+            <FaSave /> {saving ? "Saving..." : "Save Changes"}
           </button>
-
         )}
-
       </div>
 
-
-      {/* Profile Card */}
+      {error && <p role="alert">{error}</p>}
 
       <section className="profile-card">
-
-        {/* Profile Top */}
-
         <div className="profile-top">
-
           <div className="profile-avatar">
-            B
+            {user.fullName
+              ? user.fullName.charAt(0).toUpperCase()
+              : "U"}
           </div>
 
           <div>
-
-            <h2>{user.fullName}</h2>
-
-            <p>
-              Primary Policy Holder
-            </p>
-
-            <span className="profile-status">
-              Active Account
-            </span>
-
+            <h2>{user.fullName || "User"}</h2>
+            <p>Primary Policy Holder</p>
+            <span className="profile-status">Active Account</span>
           </div>
-
         </div>
 
-
-        {/* Personal Information */}
-
         <div className="profile-section">
-
           <h2>Personal Information</h2>
 
           <div className="profile-grid">
-
-
-            {/* Name */}
-
             <div className="profile-field">
-
-              <label>
-                <FaUser />
-                Full Name
-              </label>
-
+              <label><FaUser /> Full Name</label>
               {editing ? (
-
                 <input
                   type="text"
                   name="fullName"
-                  value={user.fullName}
+                  value={user.fullName || ""}
                   onChange={handleChange}
                 />
-
               ) : (
-
-                <p>{user.fullName}</p>
-
+                <p>{user.fullName || "Not available"}</p>
               )}
-
             </div>
 
-
-            {/* Email */}
-
             <div className="profile-field">
-
-              <label>
-                <FaEnvelope />
-                Email Address
-              </label>
-
-              {editing ? (
-
-                <input
-                  type="email"
-                  name="email"
-                  value={user.email}
-                  onChange={handleChange}
-                />
-
-              ) : (
-
-                <p>{user.email}</p>
-
-              )}
-
+              <label><FaEnvelope /> Email Address</label>
+              <p>{user.email || "Not available"}</p>
             </div>
 
-
-            {/* Phone */}
-
             <div className="profile-field">
-
-              <label>
-                <FaPhone />
-                Phone Number
-              </label>
-
+              <label><FaPhone /> Phone Number</label>
               {editing ? (
-
                 <input
-                  type="text"
+                  type="tel"
                   name="phone"
-                  value={user.phone}
+                  value={user.phone || ""}
                   onChange={handleChange}
                 />
-
               ) : (
-
-                <p>{user.phone}</p>
-
+                <p>{user.phone || "Not available"}</p>
               )}
-
             </div>
 
-
-            {/* DOB */}
-
             <div className="profile-field">
-
-              <label>
-                <FaCalendarAlt />
-                Date of Birth
-              </label>
-
+              <label><FaCalendarAlt /> Date of Birth</label>
               {editing ? (
-
                 <input
-                  type="text"
-                  name="dob"
-                  value={user.dob}
+                  type="date"
+                  name="dateOfBirth"
+                  value={user.dateOfBirth || ""}
                   onChange={handleChange}
                 />
-
               ) : (
-
-                <p>{user.dob}</p>
-
+                <p>{user.dateOfBirth || "Not available"}</p>
               )}
-
             </div>
 
-
-            {/* Gender */}
-
             <div className="profile-field">
-
-              <label>
-                <FaUser />
-                Gender
-              </label>
-
+              <label><FaPhone /> Emergency Contact</label>
               {editing ? (
-
-                <select
-                  name="gender"
-                  value={user.gender}
-                  onChange={handleChange}
-                >
-
-                  <option>Female</option>
-                  <option>Male</option>
-                  <option>Other</option>
-
-                </select>
-
-              ) : (
-
-                <p>{user.gender}</p>
-
-              )}
-
-            </div>
-
-
-            {/* Emergency */}
-
-            <div className="profile-field">
-
-              <label>
-                <FaPhone />
-                Emergency Contact
-              </label>
-
-              {editing ? (
-
                 <input
-                  type="text"
-                  name="emergency"
-                  value={user.emergency}
+                  type="tel"
+                  name="emergencyContact"
+                  value={user.emergencyContact || ""}
                   onChange={handleChange}
                 />
-
               ) : (
-
-                <p>{user.emergency}</p>
-
+                <p>{user.emergencyContact || "Not available"}</p>
               )}
-
             </div>
-
-
           </div>
-
         </div>
 
-
-        {/* Address */}
-
         <div className="profile-section">
-
           <h2>Address</h2>
 
           <div className="profile-field">
-
-            <label>
-              <FaMapMarkerAlt />
-              Residential Address
-            </label>
-
+            <label><FaMapMarkerAlt /> Residential Address</label>
             {editing ? (
-
               <textarea
                 name="address"
-                value={user.address}
+                value={user.address || ""}
                 onChange={handleChange}
-                rows="3"
+                rows={3}
               />
-
             ) : (
-
-              <p>{user.address}</p>
-
+              <p>{user.address || "Not available"}</p>
             )}
-
           </div>
-
         </div>
-
       </section>
-
     </div>
-
   );
-
 }
 
 export default Profile;

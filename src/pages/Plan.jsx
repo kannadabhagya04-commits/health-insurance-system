@@ -1,108 +1,88 @@
-import {Link} from "react-router-dom";
-import {FaShieldAlt,FaUsers,FaCrown} from "react-icons/fa";
-import "../styles/plans.css";
-function Plans()
-{
-    return(
-           <div className="plans-page">
-             <section className="plans-header">
 
-                <h1>choose your health Insurance Plan</h1>
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import "../styles/Plans.css";
+
+function Plans() {
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      try {
+        const response = await axios.get(
+           "http://127.0.0.1:8080/api/insurance-policies"
+        );
+
+        setPlans(response.data);
+      } catch (err) {
+        console.error("Error fetching insurance plans:", err);
+        setError(
+          "Unable to load insurance plans. Please make sure the backend is running."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPlans();
+  }, []);
+
+  return (
+    <div className="plans-page">
+      <header className="plans-header">
+        <h1>HealthCare+ Insurance Plans</h1>
+        <p>Choose the right health insurance plan for your family.</p>
+      </header>
+
+      {loading && <p>Loading insurance plans...</p>}
+
+      {error && <p className="error-message">{error}</p>}
+
+      {!loading && !error && plans.length === 0 && (
+        <p>No insurance plans are available right now.</p>
+      )}
+
+      {!loading && !error && plans.length > 0 && (
+        <div className="plans-container">
+          {plans.map((plan) => (
+            <div className="plan-card" key={plan.id}>
+              <h2>{plan.policyName}</h2>
+
+              <div className="plan-details">
                 <p>
-                  Find a plan that gives you and your family the protection you need.
-          
+                  <strong>Coverage:</strong> ₹{plan.coverage}
                 </p>
-             </section>
-             {/* Plans Section */}
-             <section className="plans-section">
-                <div className="plans-container">
-                   {/* Basic Plan */}
-                   <div className="plan-card">
-                      <div className="plan-icon">
-                          <FaShieldAlt />
-                      </div>
-                     <h2>Basic Health Plan</h2>
-                     <p className="plan-description">
-                         Essential health coverage for individuals.
-                     </p>
-                     <div className="coverage">
-                        Coverage upto <strong>₹5 Lakhs</strong>
-                     </div>
-                     <ul>
-                        <li>✓ Hospitalization Coverage</li>
-                         <li>✓ Emergency Treatment</li>
-                         <li>✓ 500+ Network Hospitals</li>
-                         <li>✓ Cashless Treatment</li>
-                     </ul>
-                     <Link to="/login" className="plan-btn">
-                      choose plan
-                     </Link>
-                    </div>  
-                     {/* Family Plan */}
-                     <div className="plan-card popular">
-                        <div className="popular-badge">
-                            Most popular
-                        </div>
-                        <div className="plan-icon">
-                            <FaUsers/>
-                        </div>
-                        <h2>family health plan</h2>
-                        <p className="plan-description">
-                            Complete protection for your entire family.
-                          </p>
-                          <div className="plan-price">
-                            <span>15,000</span>
-                            <small>/year</small>
-                          </div>
-                          <div className="coverage">
-                             Coverage up to <strong>₹10 Lakhs</strong>
-           
-                          </div>
-                            <ul>
-              <li>✓ Family Coverage up to 4 Members</li>
-              <li>✓ Hospitalization Coverage</li>
-              <li>✓ 1000+ Network Hospitals</li>
-              <li>✓ Cashless Treatment</li>
-            </ul>
-         <Link to="/login"className="plan-btn">
-         Choose plan
-         </Link>
-        </div>
-               {/* Premium Plan */}
-               <div className="plan-card">
-                <div className="plan-icon">
-                    <FaCrown />
-                </div>
-                <h2>Premimum Health Plan</h2>
-                <p className="plan-description">
-                    Advanced protection with higher coverage
+
+                <p>
+                  <strong>Premium:</strong> ₹
+                  {Number(plan.premium).toLocaleString("en-IN")}
                 </p>
-                <div className="plan-price">
-                    <span>₹25,000</span>
-                 </div>
-                 <div className="coverage">
-              Coverage up to <strong>₹25 Lakhs</strong>
-            </div>
 
-            <ul>
-              <li>✓ Premium Hospitalization Coverage</li>
-              <li>✓ Private Room</li>
-              <li>✓ 2000+ Network Hospitals</li>
-              <li>✓ Cashless Treatment</li>
-            </ul>
-
-            <Link to="/login" className="plan-btn">
-              Choose Plan
-            </Link>
-
-             </div>
+                <p>
+                  <strong>Duration:</strong> {plan.duration}
+                </p>
               </div>
-             </section>
 
+              <Link
+                to="/login"
+                state={{ selectedPlan: plan }}
+                className="plan-btn"
+              >
+                Choose Plan
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
 
-           </div>
-
-
-    )
+      <footer className="plans-footer">
+        <p>HealthCare+ — Your health, our priority.</p>
+      </footer>
+    </div>
+  );
 }
+
 export default Plans;
